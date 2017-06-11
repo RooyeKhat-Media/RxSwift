@@ -46,26 +46,6 @@ final class ObservableOptionalTest_ : ObservableOptionalTest, RxTestCase {
     ] }
 }
 
-final class ObservableShareReplay1Test_ : ObservableShareReplay1Test, RxTestCase {
-    #if os(macOS)
-    required override init() {
-        super.init()
-    }
-    #endif
-
-    static var allTests: [(String, (ObservableShareReplay1Test_) -> () -> ())] { return [
-    ("testShareReplay_DeadlockImmediatelly", ObservableShareReplay1Test.testShareReplay_DeadlockImmediatelly),
-    ("testShareReplay_DeadlockEmpty", ObservableShareReplay1Test.testShareReplay_DeadlockEmpty),
-    ("testShareReplay_DeadlockError", ObservableShareReplay1Test.testShareReplay_DeadlockError),
-    ("testShareReplay1_DeadlockErrorAfterN", ObservableShareReplay1Test.testShareReplay1_DeadlockErrorAfterN),
-    ("testShareReplay1_Basic", ObservableShareReplay1Test.testShareReplay1_Basic),
-    ("testShareReplay1_Error", ObservableShareReplay1Test.testShareReplay1_Error),
-    ("testShareReplay1_Completed", ObservableShareReplay1Test.testShareReplay1_Completed),
-    ("testShareReplayLatestWhileConnected_Completed", ObservableShareReplay1Test.testShareReplayLatestWhileConnected_Completed),
-    ("testShareReplay1_Canceled", ObservableShareReplay1Test.testShareReplay1_Canceled),
-    ] }
-}
-
 final class AnomaliesTest_ : AnomaliesTest, RxTestCase {
     #if os(macOS)
     required override init() {
@@ -654,25 +634,6 @@ final class ObservableWindowTest_ : ObservableWindowTest, RxTestCase {
     ] }
 }
 
-final class ObservableShareReplay1WhileConnectedTest_ : ObservableShareReplay1WhileConnectedTest, RxTestCase {
-    #if os(macOS)
-    required override init() {
-        super.init()
-    }
-    #endif
-
-    static var allTests: [(String, (ObservableShareReplay1WhileConnectedTest_) -> () -> ())] { return [
-    ("testShareReplayLatestWhileConnected_DeadlockImmediatelly", ObservableShareReplay1WhileConnectedTest.testShareReplayLatestWhileConnected_DeadlockImmediatelly),
-    ("testShareReplayLatestWhileConnected_DeadlockEmpty", ObservableShareReplay1WhileConnectedTest.testShareReplayLatestWhileConnected_DeadlockEmpty),
-    ("testShareReplayLatestWhileConnected_DeadlockError", ObservableShareReplay1WhileConnectedTest.testShareReplayLatestWhileConnected_DeadlockError),
-    ("testShareReplayLatestWhileConnected_DeadlockErrorAfterN", ObservableShareReplay1WhileConnectedTest.testShareReplayLatestWhileConnected_DeadlockErrorAfterN),
-    ("testShareReplayLatestWhileConnected_Basic", ObservableShareReplay1WhileConnectedTest.testShareReplayLatestWhileConnected_Basic),
-    ("testShareReplayLatestWhileConnected_Error", ObservableShareReplay1WhileConnectedTest.testShareReplayLatestWhileConnected_Error),
-    ("testShareReplayLatestWhileConnected_FirstDisconnectsThenEmits_Complete", ObservableShareReplay1WhileConnectedTest.testShareReplayLatestWhileConnected_FirstDisconnectsThenEmits_Complete),
-    ("testShareReplayLatestWhileConnected_FirstDisconnectsThenEmits_Error", ObservableShareReplay1WhileConnectedTest.testShareReplayLatestWhileConnected_FirstDisconnectsThenEmits_Error),
-    ] }
-}
-
 final class ObservableZipTest_ : ObservableZipTest, RxTestCase {
     #if os(macOS)
     required override init() {
@@ -866,6 +827,14 @@ final class ObservableMulticastTest_ : ObservableMulticastTest, RxTestCase {
     #endif
 
     static var allTests: [(String, (ObservableMulticastTest_) -> () -> ())] { return [
+    ("testMulticastWhileConnected_connectControlsSourceSubscription", ObservableMulticastTest.testMulticastWhileConnected_connectControlsSourceSubscription),
+    ("testMulticastWhileConnected_connectFirstThenSubscribe", ObservableMulticastTest.testMulticastWhileConnected_connectFirstThenSubscribe),
+    ("testMulticastWhileConnected_completed", ObservableMulticastTest.testMulticastWhileConnected_completed),
+    ("testMulticastWhileConnected_error", ObservableMulticastTest.testMulticastWhileConnected_error),
+    ("testMulticastForever_connectControlsSourceSubscription", ObservableMulticastTest.testMulticastForever_connectControlsSourceSubscription),
+    ("testMulticastForever_connectFirstThenSubscribe", ObservableMulticastTest.testMulticastForever_connectFirstThenSubscribe),
+    ("testMulticastForever_completed", ObservableMulticastTest.testMulticastForever_completed),
+    ("testMulticastForever_error", ObservableMulticastTest.testMulticastForever_error),
     ("testMulticast_Cold_Completed", ObservableMulticastTest.testMulticast_Cold_Completed),
     ("testMulticast_Cold_Error", ObservableMulticastTest.testMulticast_Cold_Error),
     ("testMulticast_Cold_Dispose", ObservableMulticastTest.testMulticast_Cold_Dispose),
@@ -877,9 +846,13 @@ final class ObservableMulticastTest_ : ObservableMulticastTest, RxTestCase {
     ("testRefCount_DeadlockErrorImmediatelly", ObservableMulticastTest.testRefCount_DeadlockErrorImmediatelly),
     ("testRefCount_DeadlockEmpty", ObservableMulticastTest.testRefCount_DeadlockEmpty),
     ("testRefCount_ConnectsOnFirst", ObservableMulticastTest.testRefCount_ConnectsOnFirst),
+    ("testRefCount_DoesntConnectsOnFirstInCaseSynchronousCompleted", ObservableMulticastTest.testRefCount_DoesntConnectsOnFirstInCaseSynchronousCompleted),
+    ("testRefCount_DoesntConnectsOnFirstInCaseSynchronousError", ObservableMulticastTest.testRefCount_DoesntConnectsOnFirstInCaseSynchronousError),
     ("testRefCount_NotConnected", ObservableMulticastTest.testRefCount_NotConnected),
     ("testRefCount_Error", ObservableMulticastTest.testRefCount_Error),
     ("testRefCount_Publish", ObservableMulticastTest.testRefCount_Publish),
+    ("testRefCount_synchronousResubscribingOnErrorWorks", ObservableMulticastTest.testRefCount_synchronousResubscribingOnErrorWorks),
+    ("testRefCount_synchronousResubscribingOnCompletedWorks", ObservableMulticastTest.testRefCount_synchronousResubscribingOnCompletedWorks),
     ("testReplayCount_Basic", ObservableMulticastTest.testReplayCount_Basic),
     ("testReplayCount_Error", ObservableMulticastTest.testReplayCount_Error),
     ("testReplayCount_Complete", ObservableMulticastTest.testReplayCount_Complete),
@@ -1158,6 +1131,23 @@ final class ObservableTimerTest_ : ObservableTimerTest, RxTestCase {
     ("testInterval_TimeSpan_Zero_DefaultScheduler", ObservableTimerTest.testInterval_TimeSpan_Zero_DefaultScheduler),
     ("testInterval_TimeSpan_Disposed", ObservableTimerTest.testInterval_TimeSpan_Disposed),
     ("test_IntervalWithRealScheduler", ObservableTimerTest.test_IntervalWithRealScheduler),
+    ] }
+}
+
+final class ObservableShareReplayScopeTests_ : ObservableShareReplayScopeTests, RxTestCase {
+    #if os(macOS)
+    required override init() {
+        super.init()
+    }
+    #endif
+
+    static var allTests: [(String, (ObservableShareReplayScopeTests_) -> () -> ())] { return [
+    ("testReplay_forever_receivesCorrectElements", ObservableShareReplayScopeTests.testReplay_forever_receivesCorrectElements),
+    ("testReplay_whileConnected_receivesCorrectElements", ObservableShareReplayScopeTests.testReplay_whileConnected_receivesCorrectElements),
+    ("testReplay_forever_error", ObservableShareReplayScopeTests.testReplay_forever_error),
+    ("testReplay_whileConnected_error", ObservableShareReplayScopeTests.testReplay_whileConnected_error),
+    ("testReplay_forever_completed", ObservableShareReplayScopeTests.testReplay_forever_completed),
+    ("testReplay_whileConnected_completed", ObservableShareReplayScopeTests.testReplay_whileConnected_completed),
     ] }
 }
 
@@ -1772,7 +1762,6 @@ func XCTMain(_ tests: [() -> ()]) {
     XCTMain([
         testCase(ObservableWithLatestFromTest_.allTests),
         testCase(ObservableOptionalTest_.allTests),
-        testCase(ObservableShareReplay1Test_.allTests),
         testCase(AnomaliesTest_.allTests),
         testCase(ObservableTakeLastTest_.allTests),
         testCase(PrimitiveSequenceTest_.allTests),
@@ -1798,7 +1787,6 @@ func XCTMain(_ tests: [() -> ()]) {
         testCase(CurrentThreadSchedulerTest_.allTests),
         testCase(ObservableSubscribeOnTest_.allTests),
         testCase(ObservableWindowTest_.allTests),
-        testCase(ObservableShareReplay1WhileConnectedTest_.allTests),
         testCase(ObservableZipTest_.allTests),
         testCase(ObservableSkipUntilTest_.allTests),
         testCase(ObservableDefaultIfEmptyTest_.allTests),
@@ -1822,6 +1810,7 @@ func XCTMain(_ tests: [() -> ()]) {
         testCase(ObservableDematerializeTest_.allTests),
         testCase(VariableTest_.allTests),
         testCase(ObservableTimerTest_.allTests),
+        testCase(ObservableShareReplayScopeTests_.allTests),
         testCase(ReactiveTests_.allTests),
         testCase(ObservableMaterializeTest_.allTests),
         testCase(NSNotificationCenterTests_.allTests),
