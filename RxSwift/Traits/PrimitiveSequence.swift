@@ -640,6 +640,56 @@ extension PrimitiveSequenceType where TraitType == CompletableTrait, ElementType
     }
     
     /**
+     Concatenates the second observable sequence to `self` upon successful termination of `self`.
+     
+     - seealso: [concat operator on reactivex.io](http://reactivex.io/documentation/operators/concat.html)
+     
+     - parameter second: Second observable sequence.
+     - returns: An observable sequence that contains the elements of `self`, followed by those of the second sequence.
+     */
+    public func concat(_ second: PrimitiveSequence<CompletableTrait, Never>) -> PrimitiveSequence<CompletableTrait, Never> {
+        return Completable.concat(primitiveSequence, second)
+    }
+    
+    /**
+     Concatenates all observable sequences in the given sequence, as long as the previous observable sequence terminated successfully.
+     
+     - seealso: [concat operator on reactivex.io](http://reactivex.io/documentation/operators/concat.html)
+     
+     - returns: An observable sequence that contains the elements of each given sequence, in sequential order.
+     */
+    public static func concat<S: Sequence>(_ sequence: S) -> PrimitiveSequence<CompletableTrait, Never>
+        where S.Iterator.Element == PrimitiveSequence<CompletableTrait, Never> {
+            let source = Observable.concat(sequence.lazy.map { $0.asObservable() })
+            return PrimitiveSequence<CompletableTrait, Never>(raw: source)
+    }
+    
+    /**
+     Concatenates all observable sequences in the given sequence, as long as the previous observable sequence terminated successfully.
+     
+     - seealso: [concat operator on reactivex.io](http://reactivex.io/documentation/operators/concat.html)
+     
+     - returns: An observable sequence that contains the elements of each given sequence, in sequential order.
+     */
+    public static func concat<C: Collection>(_ collection: C) -> PrimitiveSequence<CompletableTrait, Never>
+        where C.Iterator.Element == PrimitiveSequence<CompletableTrait, Never> {
+            let source = Observable.concat(collection.map { $0.asObservable() })
+            return PrimitiveSequence<CompletableTrait, Never>(raw: source)
+    }
+    
+    /**
+     Concatenates all observable sequences in the given sequence, as long as the previous observable sequence terminated successfully.
+     
+     - seealso: [concat operator on reactivex.io](http://reactivex.io/documentation/operators/concat.html)
+     
+     - returns: An observable sequence that contains the elements of each given sequence, in sequential order.
+     */
+    public static func concat(_ sources: PrimitiveSequence<CompletableTrait, Never> ...) -> PrimitiveSequence<CompletableTrait, Never> {
+        let source = Observable.concat(sources.map { $0.asObservable() })
+        return PrimitiveSequence<CompletableTrait, Never>(raw: source)
+    }
+    
+    /**
      Merges elements from all observable sequences from collection into a single observable sequence.
      
      - seealso: [merge operator on reactivex.io](http://reactivex.io/documentation/operators/merge.html)
