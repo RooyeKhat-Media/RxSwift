@@ -154,6 +154,11 @@ final class PrimitiveSequenceTest_ : PrimitiveSequenceTest, RxTestCase {
     ("testAsSingle_Error2", PrimitiveSequenceTest.testAsSingle_Error2),
     ("testAsSingle_subscribeOnSuccess", PrimitiveSequenceTest.testAsSingle_subscribeOnSuccess),
     ("testAsSingle_subscribeOnError", PrimitiveSequenceTest.testAsSingle_subscribeOnError),
+    ("testFirst_Empty", PrimitiveSequenceTest.testFirst_Empty),
+    ("testFirst_One", PrimitiveSequenceTest.testFirst_One),
+    ("testFirst_Many", PrimitiveSequenceTest.testFirst_Many),
+    ("testFirst_ManyWithoutCompletion", PrimitiveSequenceTest.testFirst_ManyWithoutCompletion),
+    ("testFirst_Error", PrimitiveSequenceTest.testFirst_Error),
     ("testAsMaybe_Empty", PrimitiveSequenceTest.testAsMaybe_Empty),
     ("testAsMaybe_One", PrimitiveSequenceTest.testAsMaybe_One),
     ("testAsMaybe_Many", PrimitiveSequenceTest.testAsMaybe_Many),
@@ -238,6 +243,10 @@ final class ObservableBlockingTest_ : ObservableBlockingTest, RxTestCase {
     ("testSingle_independent", ObservableBlockingTest.testSingle_independent),
     ("testSingle_timeout", ObservableBlockingTest.testSingle_timeout),
     ("testSinglePredicate_timeout", ObservableBlockingTest.testSinglePredicate_timeout),
+    ("testMaterialize_empty", ObservableBlockingTest.testMaterialize_empty),
+    ("testMaterialize_empty_fail", ObservableBlockingTest.testMaterialize_empty_fail),
+    ("testMaterialize_someData", ObservableBlockingTest.testMaterialize_someData),
+    ("testMaterialize_someData_fail", ObservableBlockingTest.testMaterialize_someData_fail),
     ] }
 }
 
@@ -501,6 +510,20 @@ final class RecursiveLockTests_ : RecursiveLockTests, RxTestCase {
     static var allTests: [(String, (RecursiveLockTests_) -> () -> ())] { return [
     ("testSynchronizes", RecursiveLockTests.testSynchronizes),
     ("testIsReentrant", RecursiveLockTests.testIsReentrant),
+    ] }
+}
+
+final class ObservableEnumeratedTest_ : ObservableEnumeratedTest, RxTestCase {
+    #if os(macOS)
+    required override init() {
+        super.init()
+    }
+    #endif
+
+    static var allTests: [(String, (ObservableEnumeratedTest_) -> () -> ())] { return [
+    ("test_Infinite", ObservableEnumeratedTest.test_Infinite),
+    ("test_Completed", ObservableEnumeratedTest.test_Completed),
+    ("test_Error", ObservableEnumeratedTest.test_Error),
     ] }
 }
 
@@ -1822,6 +1845,7 @@ func XCTMain(_ tests: [() -> ()]) {
         testCase(DisposableTest_.allTests),
         testCase(CompletableAndThenTest_.allTests),
         testCase(RecursiveLockTests_.allTests),
+        testCase(ObservableEnumeratedTest_.allTests),
         testCase(QueueTest_.allTests),
         testCase(ObservableSequenceTest_.allTests),
         testCase(DriverTest_.allTests),
