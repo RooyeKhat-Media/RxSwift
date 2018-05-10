@@ -61,6 +61,20 @@ extension GitHubSearchRepositoriesState {
 import RxSwift
 import RxCocoa
 
+struct GithubQuery {
+    let searchText: String;
+    let shouldLoadNextPage: Bool;
+    let nextURL: URL?
+}
+
+extension GithubQuery: Equatable {
+    static func == (lhs: GithubQuery, rhs: GithubQuery) -> Bool {
+        return lhs.nextURL == rhs.nextURL
+            && lhs.searchText == rhs.searchText
+            && lhs.nextURL == rhs.nextURL
+    }
+}
+
 /**
  This method contains the gist of paginated GitHub search.
  
@@ -71,23 +85,22 @@ func githubSearchRepositories(
         performSearch: @escaping (URL) -> Observable<SearchRepositoriesResponse>
     ) -> Driver<GitHubSearchRepositoriesState> {
 
-    let searchPerformerFeedback: (Driver<GitHubSearchRepositoriesState>) -> Signal<GitHubCommand> = { state in
-        // this is a general pattern how to model a most common feedback loop
-        // first select part of state describing feedback control
-        return state.map { (searchText: $0.searchText, shouldLoadNextPage: $0.shouldLoadNextPage, nextURL: $0.nextURL) }
-            // only propagate changed control values since there could be multiple feedback loops working in parallel
-            .distinctUntilChanged { $0 == $1 }
-            // perform feedback loop effects
-            .flatMapLatest { value -> Signal<GitHubCommand> in
-                if !value.shouldLoadNextPage {
+
+
+    let searchPerformerFeedback: (Driver<GitHubSearchRepositoriesState>) -> Signal<GitHubCommand> = react(
+        query: { (state) in
+            GithubQuery(searchText: state.searchText, shouldLoadNextPage: state.shouldLoadNextPage, nextURL: state.nextURL)
+        },
+        effects: { query -> Signal<GitHubCommand> in
+                if !query.shouldLoadNextPage {
                     return Signal.empty()
                 }
 
-                if value.searchText.isEmpty {
+                if query.searchText.isEmpty {
                     return Signal.just(GitHubCommand.gitHubResponseReceived(.success((repositories: [], nextURL: nil))))
                 }
 
-                guard let nextURL = value.nextURL else {
+                guard let nextURL = query.nextURL else {
                     return Signal.empty()
                 }
 
@@ -95,7 +108,7 @@ func githubSearchRepositories(
                     .asSignal(onErrorJustReturn: .failure(GitHubServiceError.networkError))
                     .map(GitHubCommand.gitHubResponseReceived)
             }
-    }
+    )
 
     // this is degenerated feedback loop that doesn't depend on output state
     let inputFeedbackLoop: (Driver<GitHubSearchRepositoriesState>) -> Signal<GitHubCommand> = { state in
@@ -113,15 +126,6 @@ func githubSearchRepositories(
         reduce: GitHubSearchRepositoriesState.reduce,
         feedback: searchPerformerFeedback, inputFeedbackLoop
     )
-}
-
-func == (
-        lhs: (searchText: String, shouldLoadNextPage: Bool, nextURL: URL?),
-        rhs: (searchText: String, shouldLoadNextPage: Bool, nextURL: URL?)
-    ) -> Bool {
-    return lhs.searchText == rhs.searchText
-        && lhs.shouldLoadNextPage == rhs.shouldLoadNextPage
-        && lhs.nextURL == rhs.nextURL
 }
 
 extension GitHubSearchRepositoriesState {
